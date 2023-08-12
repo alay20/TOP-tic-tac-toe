@@ -14,9 +14,7 @@ const players = (name, marker) => {
     const clickGrid7 = document.querySelector('.game-grid-7');
     const clickGrid8 = document.querySelector('.game-grid-8');
     
-    // const {grid} = gameBoard;
-    const board = gameBoard();
-
+    const {grid} = gameBoard;
     const playerTurn = (gridSlot, marker) => {
         if (gridSlot === 0) {
             clickGrid0.textContent = marker;
