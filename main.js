@@ -5,9 +5,20 @@ const gameBoard = (() => {
 })();
 
 
-const players = (name, marker, gridSlot) => {
+const players = (name, marker) => {
+    
+    return {name, marker};
+}
+
+//Temp create players
+const player1 = players('Art', 'x');
+const player2 = players('Stacey', 'o');
+
+const gameFlow = (() => {
     const clickGrid = document.querySelectorAll('.grid-slot');
     
+    const gridCont = document.querySelector('.grid-cont');
+
     const board = gameBoard.getGrid();
     
     const playerTurn = (gridSlot, marker) => {
@@ -16,19 +27,6 @@ const players = (name, marker, gridSlot) => {
             board.splice(gridSlot,1,marker);
         }
     }
-    
-    return {name, 
-            marker, 
-            clickGrid,     
-            playerTurn};
-}
-
-const player1 = players('Art', 'x');
-const player2 = players('Stacey', 'o');
-
-
-const gameFlow = (() => {
-    const clickGrid = document.querySelectorAll('.grid-slot');
     
     const players = [
         {
@@ -49,8 +47,23 @@ const gameFlow = (() => {
 
    const getActivePlayer = () => activePlayer;
 
-   return {clickGrid, activePlayer, switchPlayerTurn, getActivePlayer}
+   return {clickGrid, gridCont, playerTurn, switchPlayerTurn, getActivePlayer}
 })();
+
+
+gameFlow.gridCont.addEventListener('click', (e) => {
+    const clickedGridSlot = e.target;
+    const clickedGridIndex = Array.from(gameFlow.clickGrid).indexOf(clickedGridSlot);
+    console.log('the clicked slot is ' + clickedGridIndex);
+    
+    if (clickedGridIndex !== -1) {
+        const activePlayer = gameFlow.getActivePlayer();
+        const marker = activePlayer.marker; 
+
+        gameFlow.playerTurn(clickedGridIndex, marker);
+        gameFlow.switchPlayerTurn();
+    }
+})
 
 
 
@@ -58,24 +71,41 @@ const gameFlow = (() => {
 // player1.playerTurn(4,player1.marker);
 // player1.playerTurn(6,player1.marker);
 
+// gameFlow.clickGrid.forEach((gridSlot) => {
+//     gridSlot.addEventListener('click', () => gameFlow.switchPlayerTurn());
+// });
+
+// gameFlow.clickGrid.forEach((gridSlot, index) => {
+//     gridSlot.addEventListener('click', () => {
+//     if (gameFlow.getActivePlayer() === players[0]){       
+//         gameFlow.playerTurn(index, player1.marker);
+//     } else if (gameFlow.getActivePlayer() === players[1]) {       
+//         gameFlow.playerTurn(index, player2.marker);
+//     }})}
+// );
+
+// gameFlow.clickGrid.forEach((gridSlot, index) => {
+//     gridSlot.addEventListener('click', () => gameFlow.playerTurn(index, player1.marker));
+// });
+
+// gameFlow.clickGrid.forEach((gridSlot, index) => {
+//     gridSlot.addEventListener('click', () => gameFlow.playerTurn(index, player2.marker));
+// });
 
 
 
-gameFlow.clickGrid.forEach((gridSlot, index) => {
-    gridSlot.addEventListener('click', () => player1.playerTurn(index, player1.marker));
-});
-
-gameFlow.clickGrid.forEach((gridSlot) => {
-    gridSlot.addEventListener('click', () => gameFlow.switchPlayerTurn());
-});
 
 
 
-player2.clickGrid.forEach((gridSlot, index) => {
-    gridSlot.addEventListener('click', () => player2.playerTurn(index, player2.marker));
-});
+// const gridZero = document.querySelector('.game-grid-0');
 
-
+// gridZero.addEventListener('click', () =>  {
+//     if (gameFlow.getActivePlayer() === players[0]){       
+//         gameFlow.playerTurn(index, player1.marker);
+//     } else if (gameFlow.getActivePlayer() === players[1]) {       
+//         gameFlow.playerTurn(index, player2.marker);
+//     }
+// })
 
 
 // if ( 
