@@ -2,7 +2,9 @@ body {
     margin: 0;
 }
 
-button {
+button,
+button:disabled,
+button:hover:disabled {
     width: 175px;
     height: 175px;
     font-size: 250px;
@@ -10,7 +12,15 @@ button {
     justify-content: center;
     align-items: flex-end;
     line-height: 200px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(165, 0 , 68);
+    border: 2px solid rgb(0, 0, 0);
 }
+
+button:hover {
+    background-color: rgb(0,77,152);
+}
+
 
 .header-cont {
     display: flex;
@@ -29,6 +39,11 @@ button {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
+
+/* .grid-slot:disabled {
+    background-color: rgb(255, 255, 255);
+    color: rgb(165, 0 , 68);
+} */
 
 /* .game-grid-0,
 .game-grid-1,

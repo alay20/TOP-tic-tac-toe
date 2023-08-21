@@ -1,7 +1,20 @@
 const gameBoard = (() => {
     let grid = ['', '', '', '', '', '', '', '', ''];
+    
     const getGrid = () => grid;
-    return { getGrid };
+
+    const fullGrid = () => {
+        for (let i = 0; i < grid.length; i++) {
+            if (grid[i] === "") {
+                return false;
+            } 
+        
+        }
+        return true;
+    
+    }
+
+    return { getGrid, fullGrid };
 })();
 
 
@@ -47,10 +60,44 @@ const gameFlow = (() => {
 
    const getActivePlayer = () => activePlayer;
 
-   return {clickGrid, gridCont, playerTurn, switchPlayerTurn, getActivePlayer}
+//    const checkFullGrid = gameBoard.fullGrid();
+
+   const winner = () => {
+    if ( 
+        (board[0] === 'x' && board[1] === 'x' && board[2] === 'x') ||
+        (board[3] === 'x' && board[4] === 'x' && board[5] === 'x') ||   
+        (board[6] === 'x' && board[7] === 'x' && board[8] === 'x') ||
+        (board[0] === 'x' && board[3] === 'x' && board[6] === 'x') ||
+        (board[1] === 'x' && board[4] === 'x' && board[7] === 'x') ||
+        (board[2] === 'x' && board[5] === 'x' && board[8] === 'x') ||
+        (board[0] === 'x' && board[4] === 'x' && board[8] === 'x') ||
+        (board[2] === 'x' && board[4] === 'x' && board[6] === 'x')    
+        ) {
+        console.log(player1.name + ' wins!');
+        clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
+        
+    } else if ( 
+        (board[0] === 'o' && board[1] === 'o' && board[2] === 'o') ||
+        (board[3] === 'o' && board[4] === 'o' && board[5] === 'o') ||   
+        (board[6] === 'o' && board[7] === 'o' && board[8] === 'o') ||
+        (board[0] === 'o' && board[3] === 'o' && board[6] === 'o') ||
+        (board[1] === 'o' && board[4] === 'o' && board[7] === 'o') ||
+        (board[2] === 'o' && board[5] === 'o' && board[8] === 'o') ||
+        (board[0] === 'o' && board[4] === 'o' && board[8] === 'o') ||
+        (board[2] === 'o' && board[4] === 'o' && board[6] === 'o')  
+        ) {
+        console.log(player2.name + ' wins!');    
+        clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
+    } else if (gameBoard.fullGrid() === true) {
+        console.log('Draw!');
+    }
+   }
+
+   return {clickGrid, gridCont, board, playerTurn, switchPlayerTurn, getActivePlayer, winner}
 })();
 
 
+//Event listener when gameboard is clicked
 gameFlow.gridCont.addEventListener('click', (e) => {
     const clickedGridSlot = e.target;
     const clickedGridIndex = Array.from(gameFlow.clickGrid).indexOf(clickedGridSlot);
@@ -62,10 +109,39 @@ gameFlow.gridCont.addEventListener('click', (e) => {
 
         gameFlow.playerTurn(clickedGridIndex, marker);
         gameFlow.switchPlayerTurn();
+        clickedGridSlot.disabled = true;
+        gameFlow.winner();
     }
 })
 
 
+
+
+// function winner () {
+// if ( 
+//     (gameFlow.board[0] === 'x' && gameFlow.board[1] === 'x' && gameFlow.board[2] === 'x') ||
+//     (gameFlow.board[3] === 'x' && gameFlow.board[4] === 'x' && gameFlow.board[5] === 'x') ||   
+//     (gameFlow.board[6] === 'x' && gameFlow.board[7] === 'x' && gameFlow.board[8] === 'x') ||
+//     (gameFlow.board[0] === 'x' && gameFlow.board[3] === 'x' && gameFlow.board[6] === 'x') ||
+//     (gameFlow.board[1] === 'x' && gameFlow.board[4] === 'x' && gameFlow.board[7] === 'x') ||
+//     (gameFlow.board[2] === 'x' && gameFlow.board[5] === 'x' && gameFlow.board[8] === 'x') ||
+//     (gameFlow.board[0] === 'x' && gameFlow.board[4] === 'x' && gameFlow.board[8] === 'x') ||
+//     (gameFlow.board[2] === 'x' && gameFlow.board[4] === 'x' && gameFlow.board[6] === 'x')    
+//     ) {
+//     console.log(player1.name + ' wins!');
+// } else if ( 
+//     (gameFlow.board[0] === 'o' && gameFlow.board[1] === 'o' && gameFlow.board[2] === 'o') ||
+//     (gameFlow.board[3] === 'o' && gameFlow.board[4] === 'o' && gameFlow.board[5] === 'o') ||   
+//     (gameFlow.board[6] === 'o' && gameFlow.board[7] === 'o' && gameFlow.board[8] === 'o') ||
+//     (gameFlow.board[0] === 'o' && gameFlow.board[3] === 'o' && gameFlow.board[6] === 'o') ||
+//     (gameFlow.board[1] === 'o' && gameFlow.board[4] === 'o' && gameFlow.board[7] === 'o') ||
+//     (gameFlow.board[2] === 'o' && gameFlow.board[5] === 'o' && gameFlow.board[8] === 'o') ||
+//     (gameFlow.board[0] === 'o' && gameFlow.board[4] === 'o' && gameFlow.board[8] === 'o') ||
+//     (gameFlow.board[2] === 'o' && gameFlow.board[4] === 'o' && gameFlow.board[6] === 'o')  
+//     ) {
+//     console.log(player2.name + ' wins!');    
+//     }
+// }
 
 // player1.playerTurn(2,player1.marker);
 // player1.playerTurn(4,player1.marker);
@@ -120,14 +196,14 @@ gameFlow.gridCont.addEventListener('click', (e) => {
 //     ) {
 //     console.log(player1.name + ' wins!');
 // } else if ( 
-//     (player2.grid[0] === 'o' && player2.grid[1] === 'o' && player2.grid[2] === 'o') ||
-//     (player2.grid[3] === 'o' && player2.grid[4] === 'o' && player2.grid[5] === 'o') ||   
-//     (player2.grid[6] === 'o' && player2.grid[7] === 'o' && player2.grid[8] === 'o') ||
-//     (player2.grid[0] === 'o' && player2.grid[3] === 'o' && player2.grid[6] === 'o') ||
-//     (player2.grid[1] === 'o' && player2.grid[4] === 'o' && player2.grid[7] === 'o') ||
-//     (player2.grid[2] === 'o' && player2.grid[5] === 'o' && player2.grid[8] === 'o') ||
-//     (player2.grid[0] === 'o' && player2.grid[4] === 'o' && player2.grid[8] === 'o') ||
-//     (player2.grid[2] === 'o' && player2.grid[4] === 'o' && player2.grid[6] === 'o')  
+//     (board.grid[0] === 'o' && board.grid[1] === 'o' && board.grid[2] === 'o') ||
+//     (board.grid[3] === 'o' && board.grid[4] === 'o' && board.grid[5] === 'o') ||   
+//     (board.grid[6] === 'o' && board.grid[7] === 'o' && board.grid[8] === 'o') ||
+//     (board.grid[0] === 'o' && board.grid[3] === 'o' && board.grid[6] === 'o') ||
+//     (board.grid[1] === 'o' && board.grid[4] === 'o' && board.grid[7] === 'o') ||
+//     (board.grid[2] === 'o' && board.grid[5] === 'o' && board.grid[8] === 'o') ||
+//     (board.grid[0] === 'o' && board.grid[4] === 'o' && board.grid[8] === 'o') ||
+//     (board.grid[2] === 'o' && board.grid[4] === 'o' && board.grid[6] === 'o')  
 //     ) {
 //     console.log(player2.name + ' wins!');    
 //     }
