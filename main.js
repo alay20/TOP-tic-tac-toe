@@ -1,3 +1,10 @@
+// Global variables
+const player1Marker = 'x';
+const player2Marker = 'o';
+// For creating player1 and player2
+const player1Button = document.querySelector('.player1Btn'); 
+const player2Button = document.querySelector('.player2Btn');
+
 const gameBoard = (() => {
     let grid = ['', '', '', '', '', '', '', '', ''];
     
@@ -8,7 +15,6 @@ const gameBoard = (() => {
             if (grid[i] === "") {
                 return false;
             } 
-        
         }
         return true;
     
@@ -19,13 +25,31 @@ const gameBoard = (() => {
 
 
 const players = (name, marker) => {
-    
     return {name, marker};
-}
+};
 
-//Temp create players
-const player1 = players('Art', 'x');
-const player2 = players('Stacey', 'o');
+const createdPlayers = (() => {
+    let storedPlayers = [];
+
+    const getPlayers = () => storedPlayers;
+
+    let activePlayer;
+
+    const switchPlayerTurn = () => {
+        if (storedPlayers.length === 2) {
+        activePlayer = activePlayer === storedPlayers[0] ? storedPlayers[1] : storedPlayers[0];
+    }};
+
+    const getActivePlayer = () => activePlayer;
+
+    const setActivePlayer = (player) => {
+        activePlayer = player;
+    };
+    
+    return {getPlayers, switchPlayerTurn, getActivePlayer, setActivePlayer};
+})();
+
+
 
 const gameFlow = (() => {
     const clickGrid = document.querySelectorAll('.grid-slot');
@@ -33,35 +57,35 @@ const gameFlow = (() => {
     const gridCont = document.querySelector('.grid-cont');
 
     const board = gameBoard.getGrid();
-    
+
+    const players = createdPlayers.getPlayers();
+
+    const activePlayer = createdPlayers.getActivePlayer();
+
+
+    //Array of created players for function to chagne player turns
+    // const createdPlayers = [];
+
+    // const createPlayer1 = () => {
+    //     const player1Name = document.querySelector('#player1').value;
+    //     player1Button.addEventListener('click', () => {
+    //         const player1 = players(player1Name, player1Marker);
+    //         event.preventDefault(); 
+    //         console.log('player1 was created!')
+    //         createdPlayers.splice(0,0, player1);
+    //     });
+        
+    // }
+
+
     const playerTurn = (gridSlot, marker) => {
         if (board[gridSlot] === "") {
             clickGrid[gridSlot].textContent = marker;
             board.splice(gridSlot,1,marker);
         }
     }
+
     
-    const players = [
-        {
-            name: player1.name,
-            marker: player1.marker
-        },
-        {
-            name: player2.name,
-            marker: player2.marker
-        }
-    ];  
-
-    let activePlayer = players[0];
-
-    const switchPlayerTurn = () => {
-        activePlayer = activePlayer === players[0] ? players[1] : players[0];
-    };
-
-   const getActivePlayer = () => activePlayer;
-
-//    const checkFullGrid = gameBoard.fullGrid();
-
    const winner = () => {
     if ( 
         (board[0] === 'x' && board[1] === 'x' && board[2] === 'x') ||
@@ -93,9 +117,32 @@ const gameFlow = (() => {
     }
    }
 
-   return {clickGrid, gridCont, board, playerTurn, switchPlayerTurn, getActivePlayer, winner}
+   return {clickGrid, gridCont, board, players, activePlayer, 
+         playerTurn, winner}
 })();
 
+
+
+//Event listener for entering player names
+player1Button.addEventListener('click', () => {
+    const player1Name = document.querySelector('#player1').value;
+    const player1 = players(player1Name, player1Marker);
+    event.preventDefault();
+    console.log('player1 is ' + player1Name)
+    gameFlow.players.splice(0,0, player1);
+    createdPlayers.setActivePlayer(createdPlayers.getPlayers()[0]);
+    
+    // createdPlayers.activePlayer = createdPlayers.getPlayers()[0]; -> wrong because it creates a global variable createdPlayers.activePlayer
+});
+
+
+player2Button.addEventListener('click', () => {
+    const player2Name = document.querySelector('#player2').value;
+    const player2 = players(player2Name, player2Marker);
+    event.preventDefault();
+    console.log('player2 is ' + player2Name)
+    gameFlow.players.splice(1,0, player2);
+});
 
 //Event listener when gameboard is clicked
 gameFlow.gridCont.addEventListener('click', (e) => {
@@ -104,16 +151,21 @@ gameFlow.gridCont.addEventListener('click', (e) => {
     console.log('the clicked slot is ' + clickedGridIndex);
     
     if (clickedGridIndex !== -1) {
-        const activePlayer = gameFlow.getActivePlayer();
-        const marker = activePlayer.marker; 
+        const activePlayer = createdPlayers.getActivePlayer();
+        const marker = activePlayer.marker;
 
         gameFlow.playerTurn(clickedGridIndex, marker);
-        gameFlow.switchPlayerTurn();
+        createdPlayers.switchPlayerTurn();
         clickedGridSlot.disabled = true;
         gameFlow.winner();
     }
 })
 
+
+
+// Temp create players
+// const player1 = players('Art', 'x');
+// const player2 = players('Stacey', 'o');
 
 
 
