@@ -5,9 +5,10 @@ const player2Marker = 'o';
 const player1Button = document.querySelector('.player1Btn'); 
 const player2Button = document.querySelector('.player2Btn');
 
-//Player2 form elements
-const player1Form = document.querySelector('#player1');
-const player2Form = document.querySelector('#player2');
+//Player1 and Player2 form elements
+const player1Text = document.querySelector('#player1');
+const player2Text = document.querySelector('#player2');
+const player2Form = document.querySelector('.player2-form');
 
 const gameBoard = (() => {
     let grid = ['', '', '', '', '', '', '', '', ''];
@@ -109,8 +110,8 @@ const gameFlow = (() => {
 gameFlow.clickGrid.forEach((button) => {
     button.disabled = true;
 });
-player2Form.disabled = true;
-player2Button.disabled = true;
+player2Form.style.visibility = 'hidden';
+
 
 
 
@@ -122,13 +123,12 @@ player1Button.addEventListener('click', () => {
     console.log('player1 is ' + player1Name)
     createdPlayers.getPlayers().splice(0,0, player1);
     createdPlayers.setActivePlayer(createdPlayers.getPlayers()[0]);
-    player1Form.disabled = true;
-    player1Button.disabled = true;
-    player2Form.disabled = false;
-    player2Button.disabled = false;
-
     
-    // createdPlayers.activePlayer = createdPlayers.getPlayers()[0]; -> wrong because it creates a global variable createdPlayers.activePlayer
+    player1Text.disabled = true;
+    player1Button.style.visibility = 'hidden';
+    
+    // Player2 textbox and button changes
+    player2Form.style.visibility = 'visible';
 });
 
 
@@ -138,6 +138,11 @@ player2Button.addEventListener('click', () => {
     event.preventDefault();
     console.log('player2 is ' + player2Name)
     createdPlayers.getPlayers().splice(1,0, player2);
+    
+    // Activate grid
+    gameFlow.clickGrid.forEach((button) => {
+        button.disabled = false;
+    });
 });
 
 //Event listener when gameboard is clicked

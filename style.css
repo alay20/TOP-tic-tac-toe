@@ -1,10 +1,10 @@
 body {
     margin: 0;
+    background-image: url(soccer_pitch.jpg);
+    background-size: cover;
 }
 
-.grid-slot,
-.grid-slot:disabled,
-.grid-slot:hover:disabled {
+.grid-slot {
     width: 175px;
     height: 175px;
     font-size: 250px;
@@ -17,8 +17,13 @@ body {
     border: 2px solid rgb(0, 0, 0);
 }
 
-.grid-slot:hover {
-    background-color: rgb(0,77,152);
+.grid-slot:disabled {
+    background-color: rgb(255, 255, 255);
+}
+
+.grid-slot:hover:not([disabled]) {
+    background-image: url(soccer_ball.jpg);
+    background-size: cover;
 }
 
 .header-cont {
@@ -39,14 +44,20 @@ body {
     
 }
 
-form input[type="text"] {
-    border-color: rgb(0, 128, 0);
+#player1[type="text"] {
+    border-color: rgb(0,77,152);
+    border-width: 8px;
+    font-weight: bold;
+}
+
+#player2[type="text"] {
+    border-color: rgb(254,190,16);
     border-width: 8px;
 }
 
-form input[type="text"]:disabled {
-    border-color: rgb(0, 0, 0);
-    border-width: 1px;
+form input[type="text"]::placeholder {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
 }
 
 .grid-cont {
