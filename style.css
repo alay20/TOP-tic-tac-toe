@@ -2,6 +2,26 @@ body {
     margin: 0;
     background-image: url(soccer_pitch.jpg);
     background-size: cover;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.header-cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    color: rgb(0, 0, 0);
+    font-size:larger; 
+}
+
+.main-cont {
+    display: flex;
+    justify-content: space-around;
+}
+
+.grid-cont {
+    background-image: url(grid_bg.jpg);
+    background-size: cover;
 }
 
 .grid-slot {
@@ -12,13 +32,13 @@ body {
     justify-content: center;
     align-items: flex-end;
     line-height: 200px;
-    background-color: rgb(255, 255, 255);
-    color: rgb(165, 0 , 68);
+    background-color: rgba(0,0,0,0);
     border: 2px solid rgb(0, 0, 0);
+    cursor: pointer;
 }
 
 .grid-slot:disabled {
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(0,0,0,0);
 }
 
 .grid-slot:hover:not([disabled]) {
@@ -26,17 +46,7 @@ body {
     background-size: cover;
 }
 
-.header-cont {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-}
 
-.main-cont {
-    display: flex;
-    justify-content: space-around;
-}
 
 .player1-form,
 .player2-form {
@@ -44,21 +54,67 @@ body {
     
 }
 
-#player1[type="text"] {
-    border-color: rgb(0,77,152);
+#player1[type="text"],
+#player2[type="text"] {
     border-width: 8px;
+    font-size: 13px;
     font-weight: bold;
+    height: 50px;
+    width: 250px;
+    text-align: center;    
+    font-family: 'Press Start 2P', cursive;
 }
 
-#player2[type="text"] {
+#player1[type="text"],
+#player1[type="text"]:disabled {
+    border-color: rgb(165,0,68);
+    background-color: rgb(0,77,152);
+    color: rgb(237,187,0);
+}
+
+#player2[type="text"],
+#player2[type="text"]:disabled  {
     border-color: rgb(254,190,16);
-    border-width: 8px;
+    background-color: rgb(255,255,255);
+    color: rgb(0,82,159);
 }
 
 form input[type="text"]::placeholder {
-    color: rgb(0, 0, 0);
-    font-weight: bold;
+    color: rgb(201, 196, 196);
+    font-weight: bold; 
 }
+
+.player1Btn,
+.player2Btn {
+    box-sizing: border-box;
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    padding: 0;
+    cursor: pointer;
+    padding: 0.25em 0.75em;
+    min-width: 5ch;
+    min-height: 44px;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.player1Btn:disabled,
+.player2Btn:disabled {
+    opacity: 0.5;
+}
+
+.player1Btn {
+    color: rgb(219,0,48);
+    background-color: rgb(255,237,2);
+}
+
+.player2Btn {
+    color: rgb(255,255,255);
+    background-color: rgba(92,43,135,255);
+}
+
+
 
 .grid-cont {
     display: grid;
