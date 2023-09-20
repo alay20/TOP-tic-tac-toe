@@ -46,11 +46,10 @@ body {
     background-size: cover;
 }
 
-
-
 .player1-form,
 .player2-form {
     align-self: center;
+    margin-top: 200px;
     
 }
 
@@ -114,7 +113,20 @@ form input[type="text"]::placeholder {
     background-color: rgba(92,43,135,255);
 }
 
+.player1-winner,
+.player2-winner {
+    text-align: center;
+    font-size: 50px;
+    margin-top: 150px;
+}
 
+.player1-winner {
+color: rgb(165,0,68)
+}
+
+.player2-winner {
+    color: rgb(255,255,255);
+}
 
 .grid-cont {
     display: grid;

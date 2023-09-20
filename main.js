@@ -10,6 +10,8 @@ const player1Text = document.querySelector('#player1');
 const player2Text = document.querySelector('#player2');
 const player1Form = document.querySelector('.player1-name');
 const player2Form = document.querySelector('.player2-name');
+const player1Winner = document.querySelector('.player1-winner');
+const player2Winner = document.querySelector('.player2-winner');
 
 const gameBoard = (() => {
     let grid = ['', '', '', '', '', '', '', '', ''];
@@ -125,7 +127,7 @@ const gameFlow = (() => {
         ) {
             console.log(createdPlayers.getPlayers()[0].name + ' wins!');
             clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
-
+            player1Winner.textContent = 'Win!';
         } else if (
             (board[0] === 'o' && board[1] === 'o' && board[2] === 'o') ||
             (board[3] === 'o' && board[4] === 'o' && board[5] === 'o') ||
@@ -138,6 +140,7 @@ const gameFlow = (() => {
         ) {
             console.log(createdPlayers.getPlayers()[1].name + ' wins!');
             clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
+            player2Winner.textContent = 'Win!';
         } else if (gameBoard.fullGrid() === true) {
             console.log('Draw!');
         }
