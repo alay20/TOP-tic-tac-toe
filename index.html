@@ -11,7 +11,8 @@
 </head>
 <body>
     <div class=header-cont>
-        <h1>Tic Tac Toe</h1>
+        <h1 class="main-title">Tic Tac Toe</h1>
+        <button class='resetBtn'>Play Again</button>
     </div>
 
     <div class=main-cont>
@@ -21,7 +22,7 @@
                 <form class='player1-name'>
                     <p>
                         <label for='player1'></label>
-                        <input type='text' id='player1' name='player1' placeholder='Enter Player 1 Name' required>
+                        <input type='text' id='player1' name='player1' placeholder='Enter Player 1 Name' required autofocus>
                         <button class='player1Btn' type="submit">Play!</button>
                     </p>
                 </form>
@@ -45,9 +46,9 @@
             <div class='player2-form'>
                 <form class='player2-name'>
                     <p>
-                        <button class='player2Btn' type="submit">Play!</button>
                         <label for='player2'></label>
                         <input type='text' id='player2' name='player2' placeholder='Enter Player 2 Name' required>
+                        <button class='player2Btn' type="submit">Play!</button>
                     </p>
                 </form>
             </div>

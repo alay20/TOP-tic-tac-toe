@@ -2,6 +2,8 @@
 const player1Marker = 'x';
 const player2Marker = 'o';
 
+//Reset button
+const resetBtn = document.querySelector('.resetBtn');
 
 //Player1 and Player2 form elements
 const player1Button = document.querySelector('.player1Btn');
@@ -52,20 +54,52 @@ const createdPlayers = (() => {
     const getActivePlayer = () => activePlayer;
 
     const setActivePlayer = (player) => {
-        activePlayer = player;
+        activePlayer = player;        
     };
 
-    return { getPlayers, switchPlayerTurn, getActivePlayer, setActivePlayer };
+    const createPlayer1 = (e) => {
+        const player1Name = document.querySelector('#player1').value;
+        const player1 = players(player1Name, player1Marker);
+        e.preventDefault();
+        console.log('player1 is ' + player1Name)
+        createdPlayers.getPlayers().splice(0, 0, player1);
+        createdPlayers.setActivePlayer(createdPlayers.getPlayers()[0]);
+    
+        player1Text.disabled = true;
+        player1Button.style.visibility = 'hidden';
+    
+        // Player2 textbox and button changes
+        player2Form.style.visibility = 'visible';
+        player2Button.style.visibility = 'visible';
+    }
+
+    const createPlayer2 = (e) => {
+        const player2Name = document.querySelector('#player2').value;
+        const player2 = players(player2Name, player2Marker);
+        e.preventDefault();
+        console.log('player2 is ' + player2Name)
+        createdPlayers.getPlayers().splice(1, 0, player2);
+        player2Text.disabled = true;
+        player2Button.style.visibility = 'hidden';
+    
+        // Activate grid
+        gameFlow.clickGrid = document.querySelectorAll('.grid-slot');
+        gameFlow.clickGrid.forEach((button) => {
+            button.disabled = false;
+        });
+    }
+
+    return { getPlayers, switchPlayerTurn, getActivePlayer, setActivePlayer, createPlayer1, createPlayer2 };
 })();
 
 
 
 const gameFlow = (() => {
-    const clickGrid = document.querySelectorAll('.grid-slot');
+    let gridCont = document.querySelector('.grid-cont');
 
-    const gridCont = document.querySelector('.grid-cont');
+    let clickGrid = document.querySelectorAll('.grid-slot');
 
-    const board = gameBoard.getGrid();
+    let board = gameBoard.getGrid();
 
     const disablePlayerNameButton = () => {
         if (!player1Form.checkValidity()) {
@@ -102,17 +136,32 @@ const gameFlow = (() => {
     }
 
     const playerTurn = (gridSlot, marker) => {
-        if (board[gridSlot] === "") {
+        if (gameBoard.getGrid()[gridSlot] === '') {
             clickGrid[gridSlot].textContent = marker;
             if (marker === 'x') {
                 clickGrid[gridSlot].style.color = 'rgb(165,0,68)';
             } else if (marker === 'o') {
                 clickGrid[gridSlot].style.color = 'rgb(255,255,255)';
             }
-            board.splice(gridSlot, 1, marker);
+            gameBoard.getGrid().splice(gridSlot, 1, marker);
         }
     }
 
+    const clickGameBoard = (e) => {
+        const clickedGridSlot = e.target;
+        const clickedGridIndex = Array.from(clickGrid).indexOf(clickedGridSlot);
+        console.log('the clicked slot is ' + clickedGridIndex);
+    
+        if (clickedGridIndex !== -1) {
+            const activePlayer = createdPlayers.getActivePlayer();
+            const marker = activePlayer.marker;
+    
+            playerTurn(clickedGridIndex, marker);
+            createdPlayers.switchPlayerTurn();
+            clickedGridSlot.disabled = true;
+            winner();
+        }
+    }
 
     const winner = () => {
         if (
@@ -128,6 +177,7 @@ const gameFlow = (() => {
             console.log(createdPlayers.getPlayers()[0].name + ' wins!');
             clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
             player1Winner.textContent = 'Win!';
+            resetBtn.style.visibility = 'visible';
         } else if (
             (board[0] === 'o' && board[1] === 'o' && board[2] === 'o') ||
             (board[3] === 'o' && board[4] === 'o' && board[5] === 'o') ||
@@ -141,12 +191,50 @@ const gameFlow = (() => {
             console.log(createdPlayers.getPlayers()[1].name + ' wins!');
             clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
             player2Winner.textContent = 'Win!';
+            resetBtn.style.visibility = 'visible';
         } else if (gameBoard.fullGrid() === true) {
             console.log('Draw!');
+            player1Winner.textContent = 'Draw!';
+            player2Winner.textContent = 'Draw!';
+            resetBtn.style.visibility = 'visible';
         }
     }
 
-    return {clickGrid, gridCont, board, disablePlayerNameButton, checkPlayer1Form, checkPlayer2Form, checkPlayer1Entered, checkPlayer2Entered, playerTurn, winner}
+    const resetGame = () => {
+        
+        gameBoard.getGrid().forEach((element, index) => gameBoard.getGrid()[index] = "");
+        
+        clickGrid.forEach((gridSlot) => {
+            gridSlot.remove()});
+        
+        for (let i = 0; i < 9; i++) {
+            const gridSlot = document.createElement('button');
+            gridSlot.classList.add('grid-slot');
+            gridCont.appendChild(gridSlot);
+            }
+        
+        clickGrid = document.querySelectorAll('.grid-slot');
+        clickGrid.forEach((button) => {
+            button.disabled = true;
+        });
+        
+        player1Button.style.visibility = 'visible';
+        player2Form.style.visibility = 'hidden';
+        resetBtn.style.visibility = 'hidden';
+        player1Winner.textContent = '';
+        player2Winner.textContent = '';
+        player1Text.disabled = false;
+        player2Text.disabled = false;
+        player1Text.value = '';
+        player2Text.value = '';
+        createdPlayers.getPlayers().splice(0, createdPlayers.getPlayers().length);
+        checkPlayer1Form();
+        checkPlayer2Form();
+        console.log('grid should be cleared')
+    }
+
+    return {clickGrid, gridCont, 
+        disablePlayerNameButton, checkPlayer1Form, checkPlayer2Form, checkPlayer1Entered, checkPlayer2Entered, playerTurn, clickGameBoard, winner, resetGame}
 })();
 
 //Disabled elements when page loads intiially
@@ -154,60 +242,21 @@ gameFlow.clickGrid.forEach((button) => {
     button.disabled = true;
 });
 player2Form.style.visibility = 'hidden';
+resetBtn.style.visibility = 'hidden';
+
 
 // Check that player names have been entered
 gameFlow.disablePlayerNameButton();
 gameFlow.checkPlayer1Entered();
 gameFlow.checkPlayer2Entered();
 
+//Event listener for submitting player names
+player1Button.addEventListener('click', createdPlayers.createPlayer1);
+player2Button.addEventListener('click', createdPlayers.createPlayer2);
 
-
-
-//Event listener for entering player names
-player1Button.addEventListener('click', (event) => {
-    const player1Name = document.querySelector('#player1').value;
-    const player1 = players(player1Name, player1Marker);
-    event.preventDefault();
-    console.log('player1 is ' + player1Name)
-    createdPlayers.getPlayers().splice(0, 0, player1);
-    createdPlayers.setActivePlayer(createdPlayers.getPlayers()[0]);
-
-    player1Text.disabled = true;
-    player1Button.style.visibility = 'hidden';
-
-    // Player2 textbox and button changes
-    player2Form.style.visibility = 'visible';
-});
-
-
-player2Button.addEventListener('click', (event) => {
-    const player2Name = document.querySelector('#player2').value;
-    const player2 = players(player2Name, player2Marker);
-    event.preventDefault();
-    console.log('player2 is ' + player2Name)
-    createdPlayers.getPlayers().splice(1, 0, player2);
-    player2Text.disabled = true;
-    player2Button.style.visibility = 'hidden';
-
-    // Activate grid
-    gameFlow.clickGrid.forEach((button) => {
-        button.disabled = false;
-    });
-});
 
 //Event listener when gameboard is clicked
-gameFlow.gridCont.addEventListener('click', (e) => {
-    const clickedGridSlot = e.target;
-    const clickedGridIndex = Array.from(gameFlow.clickGrid).indexOf(clickedGridSlot);
-    console.log('the clicked slot is ' + clickedGridIndex);
+gameFlow.gridCont.addEventListener('click', gameFlow.clickGameBoard);
 
-    if (clickedGridIndex !== -1) {
-        const activePlayer = createdPlayers.getActivePlayer();
-        const marker = activePlayer.marker;
-
-        gameFlow.playerTurn(clickedGridIndex, marker);
-        createdPlayers.switchPlayerTurn();
-        clickedGridSlot.disabled = true;
-        gameFlow.winner();
-    }
-})
+//Event listener for reset button
+resetBtn.addEventListener('click', gameFlow.resetGame);
