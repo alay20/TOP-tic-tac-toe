@@ -87,6 +87,11 @@ const createdPlayers = (() => {
         gameFlow.clickGrid.forEach((button) => {
             button.disabled = false;
         });
+
+        resetBtn.textContent = 'Kick-off!';
+        resetBtn.disabled = true;
+        resetBtn.style.cursor = 'auto';
+        resetBtn.style.visibility = 'visible';
     }
 
     return { getPlayers, switchPlayerTurn, getActivePlayer, setActivePlayer, createPlayer1, createPlayer2 };
@@ -177,7 +182,8 @@ const gameFlow = (() => {
             console.log(createdPlayers.getPlayers()[0].name + ' wins!');
             clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
             player1Winner.textContent = 'Win!';
-            resetBtn.style.visibility = 'visible';
+            resetBtn.textContent = 'Play again';
+            resetBtn.disabled = false;
         } else if (
             (board[0] === 'o' && board[1] === 'o' && board[2] === 'o') ||
             (board[3] === 'o' && board[4] === 'o' && board[5] === 'o') ||
@@ -191,12 +197,14 @@ const gameFlow = (() => {
             console.log(createdPlayers.getPlayers()[1].name + ' wins!');
             clickGrid.forEach((_value, index) => clickGrid[index].disabled = true);
             player2Winner.textContent = 'Win!';
-            resetBtn.style.visibility = 'visible';
+            resetBtn.textContent = 'Play again';
+            resetBtn.disabled = false;
         } else if (gameBoard.fullGrid() === true) {
             console.log('Draw!');
             player1Winner.textContent = 'Draw!';
             player2Winner.textContent = 'Draw!';
-            resetBtn.style.visibility = 'visible';
+            resetBtn.textContent = 'Play again';
+            resetBtn.disabled = false;
         }
     }
 

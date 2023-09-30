@@ -14,7 +14,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: rgb(0, 0, 0);
     font-size:larger; 
 }
@@ -117,9 +117,19 @@ form input[type="text"]::placeholder {
     background-color: rgb(255,237,2);
 }
 
+.player1Btn:hover{
+    color:  rgb(255,237,2);
+    background-color: rgb(219,0,48);
+}
+
 .player2Btn {
     color: rgb(255,255,255);
     background-color: rgba(92,43,135,255);
+}
+
+.player2Btn:hover {
+    color: rgba(92,43,135,255);
+    background-color: rgb(255,255,255);
 }
 
 .resetBtn {
@@ -127,14 +137,9 @@ form input[type="text"]::placeholder {
     cursor: pointer;
 }
 
-.player1Btn:hover{
-    color:  rgb(255,237,2);
-    background-color: rgb(219,0,48);
-}
-
-.player2Btn:hover {
-    color: rgba(92,43,135,255);
-    background-color: rgb(255,255,255);
+.resetBtn:disabled {
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
 }
 
 .resetBtn:hover {
@@ -157,3 +162,10 @@ color: rgb(165,0,68)
     color: rgb(255,255,255);
 }
 
+.footer {
+    margin-top: 10px;
+}
+
+.credit {
+    font-size: x-small;
+}
